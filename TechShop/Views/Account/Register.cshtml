@@ -1,0 +1,53 @@
+﻿@model MemberRegisterVm
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="login-register-area pt-60 pb-65">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+                <div class="login-register-wrapper">
+                    <div class="login-register-tab-list nav">
+                        <a data-toggle="tab" href="#lg2">
+                            <h4> register </h4>
+                        </a>
+                    </div>
+                    <div id="lg2" class="tab-pane">
+                        <div class="login-form-container">
+                            <div class="login-register-form">
+                                <form  method="post">
+                                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                                    <input type="text" asp-for="@Model.UserName" placeholder="Username">
+                                    <span class="text-danger" asp-validation-for="@Model.UserName"></span>
+
+                                    <input type="text" asp-for="@Model.Email" placeholder="Email">
+                                    <span class="text-danger" asp-validation-for="@Model.Email"></span>
+
+                                    <input type="text" asp-for="@Model.Fullname" placeholder="Fullname">
+                                    <span class="text-danger" asp-validation-for="@Model.Fullname"></span>
+
+                                    <input type="password" asp-for="@Model.Password" placeholder="Password">
+                                    <span class="text-danger" type="text" asp-validation-for="@Model.Password"></span>
+
+                                    <input type="password" asp-for="@Model.ConfirmPassword" placeholder="Confirm Password">
+                                    <span class="text-danger" type="text" asp-validation-for="@Model.ConfirmPassword"></span>
+
+                                    <div class="button-box">
+                                        <button type="submit"><span>Register</span></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}
