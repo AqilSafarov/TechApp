@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TechShop.Areas.Manage.ViewModels;
 using TechShop.Models;
@@ -47,17 +49,33 @@ namespace TechShop.Areas.Manage.Controllers
                  
             }
 
-            Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(admin, loginVm.Password, false, false);
+            //Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(admin, loginVm.Password, false, false);
 
-            if (!result.Succeeded)
+            if (await _userManager.CheckPasswordAsync(admin,loginVm.Password))
             {
                 ModelState.AddModelError("", "Istifadeci adi ve ya parol sehvdir");
                 return View();
             }
 
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
+           {
+               new Claim(ClaimTypes.Name,admin.UserName),
+               new Claim(ClaimTypes.Role,"Admin")
+
+            }, "Admin_Auth");
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync("Admin_Auth", claimsPrincipal);
+
             return RedirectToAction("Index","Home");
         }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("Admin_Auth");
 
+            return RedirectToAction("Index", "Home");
+        }
 
         #region CreateRole
         //public async Task Create()

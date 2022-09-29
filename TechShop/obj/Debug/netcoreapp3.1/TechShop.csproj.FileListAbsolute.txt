@@ -164,3 +164,11 @@ C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razo
 C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Views\Account\Profile.cshtml.g.cs
 C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Views\Account\Register.cshtml.g.cs
 C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Views\Shop\Index.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Category\Index.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Category\Create.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Category\Edit.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Category\Delete.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Create.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Index.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Delete.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Tag\Edit.cshtml.g.cs

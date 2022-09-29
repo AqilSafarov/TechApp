@@ -1,0 +1,98 @@
+﻿@model CategoryVm
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+
+    int maxPageCount = ViewBag.PageCount;
+    int selectedPage = ViewBag.SelectedPage;
+    int counter = (selectedPage - 1) * 2 + 1;
+}
+
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-end mb-2">
+        <a asp-action="create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create new
+        </a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr class="row">
+                <th class="col-md-1" scope="col">#</th>
+                <th class="col-md-3" scope="col">Name</th>
+                <th class="col-md-4" scope="col">Order</th>
+                <th class="col-md-2" scope="col">CreatedAt</th>
+                <th class="col-md-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Categories)
+            {
+            <tr class="row">
+                <td class="col-md-1">@counter</td>
+                <td class="col-md-3">@item.Name</td>
+                <td class="col-md-3">@item.Order</td>
+                <td class="col-md-3">@item.CreatedAt</td>
+
+
+                <td class="col-md-2">
+                    <a asp-action="detail" asp-route-id="@item.Id" class="btn btn-info">
+                        <i class="far fa-eye"></i>
+                    </a>
+                    <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <a asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+           counter++;
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            @if (selectedPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="index" asp-route-page="1" tabindex="-1">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item ">
+                    <a class="page-link" asp-action="index" asp-route-page="@(selectedPage-1)" tabindex="-1">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+}
+
+            @for (int i = (selectedPage > 1 ? (selectedPage - 1) : 1); i <= (selectedPage < maxPageCount ? selectedPage + 1 : maxPageCount); i++)
+            {
+                <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+}
+
+
+            @if (selectedPage < maxPageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="index" asp-route-page="@(selectedPage+1)" tabindex="-1">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-action="index" asp-route-page="@maxPageCount" tabindex="-1">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+}
+        </ul>
+    </nav>
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+}
+

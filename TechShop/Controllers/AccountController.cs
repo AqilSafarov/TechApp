@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TechShop.Models;
 using TechShop.View_Models;
@@ -47,6 +49,17 @@ namespace TechShop.Controllers
                 return View();
 
             }
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
+            {
+               new Claim(ClaimTypes.Name,member.UserName),
+               new Claim(ClaimTypes.Email,member.Email),
+               new Claim(ClaimTypes.Role,"Member")
+
+            },"Member_Auth");
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync("Member_Auth",claimsPrincipal);
 
 
             return RedirectToAction("Index","Home");
@@ -103,7 +116,17 @@ namespace TechShop.Controllers
             }
 
             await _userManager.AddToRoleAsync(member,"Member");
-            await _signInManager.SignInAsync(member, true);
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
+             {
+               new Claim(ClaimTypes.Name,member.UserName),
+               new Claim(ClaimTypes.Email,member.Email),
+               new Claim(ClaimTypes.Role,"Member")
+
+            }, "Member_Auth");
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync("Member_Auth", claimsPrincipal);
 
             return RedirectToAction("Index","Home");
 
@@ -113,6 +136,12 @@ namespace TechShop.Controllers
         public async Task<IActionResult> Profile()
         {
             return View();
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("Member_Auth");
+
+            return RedirectToAction("Index","Home");
         }
     }
 }

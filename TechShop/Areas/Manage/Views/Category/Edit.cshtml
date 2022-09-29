@@ -1,0 +1,30 @@
+﻿@model CategoryCreateVm
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body ">
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" value="@ViewBag.Id" name="Id" />
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label asp-for="@Model.Order"></label>
+                        <input asp-for="@Model.Order" class="form-control" placeholder="Order">
+                        <span asp-validation-for="@Model.Order" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label asp-for="@Model.Name"></label>
+                        <textarea asp-for="@Model.Name" class="form-control" placeholder="Name" rows="3"></textarea>
+                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                    </div>
+                  
+                </div>
+                <button type="submit" class="btn btn-primary">Edit</button>
+            </form>
+        </div>
+    </div>
+</div>

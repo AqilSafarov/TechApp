@@ -61,9 +61,9 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" asp-action="index" asp-controller="author">
+                <a class="nav-link" asp-action="index" asp-controller="category">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Aurhors</span>
+                    <span>Category</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -79,7 +79,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" asp-action="index" asp-controller="book">
+                <a class="nav-link" asp-action="index" asp-controller="Tag">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Books</span>
                 </a>
@@ -372,6 +372,7 @@
     <!-- Custom scripts for all pages-->
     <script src="~/manage/assets/js/sb-admin-2.min.js"></script>
 
+    @RenderSection("Scripts", false)
 
 
 
