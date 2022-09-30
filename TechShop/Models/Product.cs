@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -38,6 +39,20 @@ namespace TechShop.Models
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public List<ProductTag> ProductTags { get; set; }
+
+        [NotMapped]
+        public int[] TagIds { get; set; }
+
+        public List<ProductPhoto> ProductPhotos { get; set; }
+
+        [NotMapped]
+        public List<IFormFile> Files { get; set; } = new List<IFormFile>();
+
+        [NotMapped]
+        public List<int> FileIds { get; set; }
+
     }
 
 }

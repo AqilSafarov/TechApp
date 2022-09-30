@@ -175,3 +175,5 @@ C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razo
 C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Product\Create.cshtml.g.cs
 C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Product\Edit.cshtml.g.cs
 C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Areas\Manage\Views\Product\Index.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Views\Product\Index.cshtml.g.cs
+C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\obj\Debug\netcoreapp3.1\Razor\Views\Product\Detail.cshtml.g.cs

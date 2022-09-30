@@ -1,8 +1,120 @@
-﻿
+﻿@model Product
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+
+    List<Category> categories = ViewBag.Categories;
+    List<Tag> tags = ViewBag.Tags;
 }
 
-<h1>Edit</h1>
 
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body ">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label asp-for="@Model.Name"></label>
+                        <input asp-for="@Model.Name" class="form-control" placeholder="Name">
+                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label asp-for="@Model.Slug"></label>
+                        <input asp-for="@Model.Slug" class="form-control" placeholder="Slug">
+                        <span asp-validation-for="@Model.Slug" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.Price"></label>
+                        <input asp-for="@Model.Price" class="form-control" placeholder="Price">
+                        <span asp-validation-for="@Model.Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.ProducingPrice"></label>
+                        <input asp-for="@Model.ProducingPrice" class="form-control" placeholder="ProducingPrice">
+                        <span asp-validation-for="@Model.ProducingPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.DiscountPrice"></label>
+                        <input asp-for="@Model.DiscountPrice" class="form-control" placeholder="DiscountPrice">
+                        <span asp-validation-for="@Model.DiscountPrice" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                        <label asp-for="@Model.CategoryId">Category</label>
+                        <select class="form-control" asp-for="@Model.CategoryId" asp-items="@(new SelectList(categories,"Id","Name"))">
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="TagIds">ProductTags</label>
+                        <select class="form-control" name="TagIds" multiple>
+
+                            @foreach (var tag in tags)
+                            {
+                                if (Model.ProductTags.Any(x => x.TagId == tag.Id))
+                                {
+                                    <option selected value="@tag.Id">@tag.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@tag.Id">@tag.Name</option>
+
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label asp-for="@Model.IsAvailable"></label>
+                        <input asp-for="@Model.IsAvailable" class="form-control" placeholder="">
+                        <span asp-validation-for="@Model.IsAvailable" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label asp-for="@Model.InfoText"></label>
+                        <textarea asp-for="@Model.InfoText" class="form-control" placeholder="InfoText" rows="5"></textarea>
+                        <span asp-validation-for="@Model.InfoText" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label asp-for="@Model.Desc"></label>
+                        <textarea asp-for="@Model.Desc" class="form-control" placeholder="Desc" rows="3"></textarea>
+                        <span asp-validation-for="@Model.Desc" class="text-danger"></span>
+                    </div>
+
+                    @foreach (var photo in Model.ProductPhotos)
+                    {
+
+                        <div class="form-group col-md-12 d-flex">
+                            <div style="margin-top:8px" class="photo-box">
+                                <img style="max-width:20%" src="~/uploads/products/@photo.Name" alt="Alternate Text" />
+                                <input name="FileIds[]" hidden value="@photo.Id" />
+                                <i class="fas fa-times removePhoto" style="cursor:pointer"></i>
+
+                            </div>
+                        </div>
+
+                    }
+
+                    <div class="form-group col-md-12">
+                        <label asp-for="@Model.Files"></label>
+                        <input asp-for="@Model.Files" class="form-control" placeholder="Files">
+                        <span asp-validation-for="@Model.Files" class="text-danger"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", ".removePhoto", function () {
+                $(this).parent().empty()
+            })
+        })
+    </script>
+}

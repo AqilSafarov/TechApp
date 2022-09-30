@@ -10,5 +10,7 @@ namespace TechShop.Models
     {
         [MaxLength(20)]
         public string Name { get; set; }
+        public List<ProductTag> ProductTags { get; set; }
+
     }
 }
