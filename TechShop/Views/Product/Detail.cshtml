@@ -32,18 +32,22 @@
                             @foreach (var photo in Model.Product.ProductPhotos)
                             {
                                 <a data-image="../../uploads/products/@photo.Name" data-zoom-image="../../uploads/products/@photo.Name">
-                                    <img style="max-width:108px;"  src="~/uploads/products/@photo.Name" alt="">
+                                    <img style="max-width:108px;" src="~/uploads/products/@photo.Name" alt="">
                                 </a>
                             }
 
                         </div>
-                        <span>-29%</span>
+                        @if (Model.Product.DiscountPercent > 0)
+                        {
+                            <span>-@Model.Product.DiscountPercent%</span>
+
+                        }
                     </div>
                  
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-content">
-                        <h4>Phantom Remote Control Ver 2018</h4>
+                        <h4>@Model.Product.Name</h4>
                         <div class="rating-review">
                             <div class="pro-dec-rating">
                                 <i class="ion-android-star-outline theme-star"></i>
@@ -59,11 +63,11 @@
                                 </ul>
                             </div>
                         </div>
-                        <span>$260.00</span>
+                        <span>$@Model.Product.DiscountPrice</span>
                         <div class="in-stock">
-                            <p>Available: <span>In stock</span></p>
+                            <p>Available: <span>@(Model.Product.IsAvailable?"In stock":"out stock")</span></p>
                         </div>
-                        <p>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. </p>
+                        <p>@Model.Product.InfoText</p>
                         <div class="pro-dec-feature">
                             <ul>
                                 <li><input type="checkbox"> Protection Plan: <span> 2 year  $4.99</span></li>
@@ -89,22 +93,17 @@
                         </div>
                         <div class="pro-dec-categories">
                             <ul>
-                                <li class="categories-title">Categories:</li>
-                                <li><a href="#">Computer,</a></li>
-                                <li><a href="#"> Accessories, </a></li>
-                                <li><a href="#">Laptop,</a></li>
-                                <li><a href="#">Digital,</a></li>
-                                <li><a href="#">Electronic, </a></li>
-                                <li><a href="#">Free Shipping.</a></li>
+                              Category: @Model.Product.Category.Name
                             </ul>
                         </div>
                         <div class="pro-dec-categories">
                             <ul>
                                 <li class="categories-title">Tags: </li>
-                                <li><a href="#">Plazatheme,</a></li>
-                                <li><a href="#"> Table, </a></li>
-                                <li><a href="#">Woo,</a></li>
-                                <li><a href="#"> e-Commerce,</a></li>
+                                @foreach (var productTags in Model.Product.ProductTags)
+                                {
+                                    <li><a href="#"> @productTags.Tag.Name,</a></li>
+
+                                }
                             </ul>
                         </div>
                         <div class="pro-dec-social">
@@ -135,25 +134,19 @@
                 <div class="tab-content description-review-bottom">
                     <div id="des-details1" class="tab-pane active">
                         <div class="product-description-wrapper">
-                            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam est usus legentis in iis qui facit eorum claritatem. </p>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. </p>
-                            <ul>
-                                <li>-  Typi non habent claritatem insitam</li>
-                                <li>-  Est usus legentis in iis qui facit eorum claritatem. </li>
-                                <li>-  Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius.</li>
-                                <li>-  Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.</li>
-                            </ul>
+                           @*@Html.Raw(Model.Product.Desc) //After CKEditor active edenden sonra kos*@
+                            @Model.Product.Desc
                         </div>
                     </div>
                     <div id="des-details2" class="tab-pane">
                         <div class="product-anotherinfo-wrapper">
                             <ul>
                                 <li><span>Tags:</span></li>
-                                <li><a href="#"> Fashion,</a></li>
-                                <li><a href="#"> Office Furniture,</a></li>
-                                <li><a href="#"> Sports,</a></li>
-                                <li><a href="#"> Jewelry,</a></li>
-                                <li><a href="#">  watch</a></li>
+                                @foreach (var productTags in Model.Product.ProductTags)
+                                {
+                                    <li><a href="#"> @productTags.Tag.Name,</a></li>
+
+                                }
                             </ul>
                         </div>
                     </div>
@@ -243,246 +236,68 @@
             </div>
             <div class="product-slider-nav nav-style"></div>
             <div class="headphone-slider-active product-slider owl-carousel nav-style">
-                <div class="devita-product-2">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/headphone-1.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="list-col">
-                        <div class="gridview">
-                            <div class="product-content text-center">
-                                <span>Headphone, Accessories</span>
-                                <h4><a href="product-details.html">Matrior white Headphone Ver 2018 </a></h4>
-                                <div class="product-price-wrapper">
-                                    <span>$260.00</span>
+                @foreach (var item in Model.RelatedProducts)
+                {
+                        ProductPhoto itemPoster = item.ProductPhotos.OrderBy(x => x.Order).FirstOrDefault();
+                    <div class="devita-product-2">
+                        <div class="product-img">
+                            <a href="product-details.html">
+                                @if (itemPoster!=null)
+                                {
+                                <img src="~/uploads/products/@itemPoster.Name" alt="">
+
+                                }
+                                @if (item.DiscountPercent>0)
+                                {
+                                    <span>-@item.DiscountPercent%</span>
+                                }
+                            </a>
+                        </div>
+                        <div class="list-col">
+                            <div class="gridview">
+                                <div class="product-content text-center">
+                                   @{ 
+                                       string itemPrtags = "";
+                                       foreach (var itemPrTag in item.ProductTags)
+                                       {
+                                           itemPrtags += itemPrTag.Tag.Name + ",";
+                                       }
+                                   }
+                                    <span>
+                                        @itemPrtags
+                                    </span>
+                                    <h4><a href="product-details.html">@item.Name </a></h4>
+                                    <div class="product-price-wrapper">
+                                        <span>$@item.DiscountPrice</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="product-action-wrapper-2 text-center">
-                                <div class="product-rating">
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div>
-                                <p> Quam elit phasellus nibh sed eget, sed nunc in ultricies sodales sapien, non velit scelerisque...</p>
-                                <div class="product-action">
-                                    <a class="same-action" title="Wishlist" href="#">
-                                        <i class="fa fa-heart-o"></i>
-                                    </a>
-                                    <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
-                                        Add to Cart
-                                    </a>
-                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                        <i class="fa fa-sliders fa-rotate-90"></i>
-                                    </a>
+                                <div class="product-action-wrapper-2 text-center">
+                                    <div class="product-rating">
+                                        <i class="ion-android-star-outline theme-star"></i>
+                                        <i class="ion-android-star-outline theme-star"></i>
+                                        <i class="ion-android-star-outline theme-star"></i>
+                                        <i class="ion-android-star-outline theme-star"></i>
+                                        <i class="ion-android-star-outline"></i>
+                                    </div>
+                                    <p> @item.InfoText</p>
+                                    <div class="product-action">
+                                        <a class="same-action" title="Wishlist" href="#">
+                                            <i class="fa fa-heart-o"></i>
+                                        </a>
+                                        <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
+                                            Add to Cart
+                                        </a>
+                                        <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
+                                            <i class="fa fa-sliders fa-rotate-90"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="devita-product-2">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/headphone-2.jpg" alt="">
-                        </a>
-                        <span>-30%</span>
-                    </div>
-                    <div class="list-col">
-                        <div class="gridview">
-                            <div class="product-content text-center">
-                                <span>Headphone, Accessories</span>
-                                <h4><a href="product-details.html">Matrior black Headphone Ver 2018</a></h4>
-                                <div class="product-price-wrapper">
-                                    <span>$260.00</span>
-                                    <span class="product-price-old">$162.00 </span>
-                                </div>
-                            </div>
-                            <div class="product-action-wrapper-2 text-center">
-                                <div class="product-rating">
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div>
-                                <p> Quam elit phasellus nibh sed eget, sed nunc in ultricies sodales sapien, non velit scelerisque...</p>
-                                <div class="product-action">
-                                    <a class="same-action" title="Wishlist" href="#">
-                                        <i class="fa fa-heart-o"></i>
-                                    </a>
-                                    <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
-                                        Add to Cart
-                                    </a>
-                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                        <i class="fa fa-sliders fa-rotate-90"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="devita-product-2">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/headphone-3.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="list-col">
-                        <div class="gridview">
-                            <div class="product-content text-center">
-                                <span>Headphone, Accessories</span>
-                                <h4><a href="product-details.html">Matrior blue Headphone Ver 2018</a></h4>
-                                <div class="product-price-wrapper">
-                                    <span>$300.00</span>
-                                </div>
-                            </div>
-                            <div class="product-action-wrapper-2 text-center">
-                                <div class="product-rating">
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div>
-                                <p> Quam elit phasellus nibh sed eget, sed nunc in ultricies sodales sapien, non velit scelerisque...</p>
-                                <div class="product-action">
-                                    <a class="same-action" title="Wishlist" href="#">
-                                        <i class="fa fa-heart-o"></i>
-                                    </a>
-                                    <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
-                                        Add to Cart
-                                    </a>
-                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                        <i class="fa fa-sliders fa-rotate-90"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="devita-product-2">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/headphone-4.jpg" alt="">
-                        </a>
-                        <span>-10%</span>
-                    </div>
-                    <div class="list-col">
-                        <div class="gridview">
-                            <div class="product-content text-center">
-                                <span>Headphone, Accessories</span>
-                                <h4><a href="product-details.html">Matrior black Headphone Ver 2018</a></h4>
-                                <div class="product-price-wrapper">
-                                    <span>$120.00</span>
-                                    <span class="product-price-old">$150.00 </span>
-                                </div>
-                            </div>
-                            <div class="product-action-wrapper-2 text-center">
-                                <div class="product-rating">
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div>
-                                <p> Quam elit phasellus nibh sed eget, sed nunc in ultricies sodales sapien, non velit scelerisque...</p>
-                                <div class="product-action">
-                                    <a class="same-action" title="Wishlist" href="#">
-                                        <i class="fa fa-heart-o"></i>
-                                    </a>
-                                    <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
-                                        Add to Cart
-                                    </a>
-                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                        <i class="fa fa-sliders fa-rotate-90"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="devita-product-2">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/headphone-5.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="list-col">
-                        <div class="gridview">
-                            <div class="product-content text-center">
-                                <span>Headphone, Accessories</span>
-                                <h4><a href="product-details.html">Matrior white Headphone Ver 2018</a></h4>
-                                <div class="product-price-wrapper">
-                                    <span>$190.00</span>
-                                </div>
-                            </div>
-                            <div class="product-action-wrapper-2 text-center">
-                                <div class="product-rating">
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div>
-                                <p> Quam elit phasellus nibh sed eget, sed nunc in ultricies sodales sapien, non velit scelerisque...</p>
-                                <div class="product-action">
-                                    <a class="same-action" title="Wishlist" href="#">
-                                        <i class="fa fa-heart-o"></i>
-                                    </a>
-                                    <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
-                                        Add to Cart
-                                    </a>
-                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                        <i class="fa fa-sliders fa-rotate-90"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="devita-product-2">
-                    <div class="product-img">
-                        <a href="product-details.html">
-                            <img src="~/assets/img/product/headphone-2.jpg" alt="">
-                        </a>
-                        <span>-15%</span>
-                    </div>
-                    <div class="list-col">
-                        <div class="gridview">
-                            <div class="product-content text-center">
-                                <span>Headphone, Accessories</span>
-                                <h4><a href="product-details.html">Matrior black Headphone Ver 2018</a></h4>
-                                <div class="product-price-wrapper">
-                                    <span>$260.00</span>
-                                    <span class="product-price-old">$162.00 </span>
-                                </div>
-                            </div>
-                            <div class="product-action-wrapper-2 text-center">
-                                <div class="product-rating">
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline theme-star"></i>
-                                    <i class="ion-android-star-outline"></i>
-                                </div>
-                                <p> Quam elit phasellus nibh sed eget, sed nunc in ultricies sodales sapien, non velit scelerisque...</p>
-                                <div class="product-action">
-                                    <a class="same-action" title="Wishlist" href="#">
-                                        <i class="fa fa-heart-o"></i>
-                                    </a>
-                                    <a class="action-cart" title="Quick View" data-toggle="modal" data-target="#exampleModal" href="#">
-                                        Add to Cart
-                                    </a>
-                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                        <i class="fa fa-sliders fa-rotate-90"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+                                       }
+
             </div>
         </div>
     </div>
@@ -496,6 +311,6 @@
 
 
 
-   =
+   
 </body>
 

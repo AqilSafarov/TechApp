@@ -35,7 +35,7 @@ namespace TechShop.Controllers
             ProductDetailVm productDetail = new ProductDetailVm()
             {
                 Product = product,
-                RelatedProducts = await _context.Products.Where(x => x.CategoryId == product.Id).OrderByDescending(x => x.CreatedAt).Take(10).ToListAsync()
+                RelatedProducts = await _context.Products.Include(x=>x.Category).Include(x=>x.ProductTags).ThenInclude(x=>x.Tag).Include(x=>x.ProductPhotos).Where(x => x.CategoryId == product.CategoryId).OrderByDescending(x => x.CreatedAt).Take(10).ToListAsync()
         };
 
             return View(productDetail);

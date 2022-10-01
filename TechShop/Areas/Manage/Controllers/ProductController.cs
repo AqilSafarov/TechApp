@@ -138,7 +138,7 @@ namespace TechShop.Areas.Manage.Controllers
 
             product.CreatedAt = DateTime.UtcNow;
             product.ModifideAt = DateTime.UtcNow;
-            product.DiscountPrice = product.DiscountPrice <= 0 ? product.Price : (product.Price * (100 - product.DiscountPrice) / 100);
+            product.DiscountPrice = product.DiscountPercent <= 0 ? product.Price : (product.Price * (100 - product.DiscountPercent) / 100);
 
 
             await _context.Products.AddAsync(product);
@@ -279,9 +279,9 @@ namespace TechShop.Areas.Manage.Controllers
 
 
 
-            if (existProduct.Price != product.Price || existProduct.DiscountPrice != product.DiscountPrice)
+            if (existProduct.Price != product.Price || existProduct.DiscountPercent != product.DiscountPercent)
             {
-                product.DiscountPrice = product.DiscountPrice <= 0 ? product.Price : (product.Price * (100 - product.DiscountPrice) / 100);
+                product.DiscountPercent = product.DiscountPercent <= 0 ? product.Price : (product.Price * (100 - product.DiscountPercent) / 100);
 
             }
 

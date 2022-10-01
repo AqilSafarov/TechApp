@@ -25,6 +25,10 @@ namespace TechShop.Models
         [Column(TypeName = "float"), Range(0, double.MaxValue)]
 
         public double DiscountPrice { get; set; }
+
+        [Column(TypeName = "float"), Range(0, 100)]
+
+        public double DiscountPercent { get; set; }
         [MaxLength(1500)]
 
         public string Desc { get; set; }
