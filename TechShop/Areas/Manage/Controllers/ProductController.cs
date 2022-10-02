@@ -57,7 +57,6 @@ namespace TechShop.Areas.Manage.Controllers
                 return View();
             }
             #endregion
-
             #region CheheckSlug
             if (await _context.Products.AnyAsync(x => x.Slug.ToLower() == product.Slug.Trim().ToLower()))
             {
@@ -297,6 +296,27 @@ namespace TechShop.Areas.Manage.Controllers
             existProduct.ModifideAt =DateTime.UtcNow;
 
 
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Review(int productId)
+        {
+            List<ProductReview> productReviews = await _context.ProductReviews.Where(x => x.ProductId == productId).ToListAsync();
+
+            return View(productReviews);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReview(int id)
+        {
+            ProductReview review = await _context.ProductReviews.FirstOrDefaultAsync(x=>x.Id== id);
+            if (review==null)
+            {
+                return NotFound();
+            }
+
+            _context.ProductReviews.Remove(review);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");

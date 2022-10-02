@@ -43,22 +43,32 @@
 
                         }
                     </div>
-                 
+
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-content">
                         <h4>@Model.Product.Name</h4>
                         <div class="rating-review">
                             <div class="pro-dec-rating">
-                                <i class="ion-android-star-outline theme-star"></i>
-                                <i class="ion-android-star-outline theme-star"></i>
-                                <i class="ion-android-star-outline theme-star"></i>
-                                <i class="ion-android-star-outline theme-star"></i>
-                                <i class="ion-android-star-outline"></i>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Model.Product.Rate)
+                                    {
+                                        <i class="ion-android-star-outline theme-star"></i>
+
+                                    }
+                                    else
+                                    {
+                                        <i class="ion-android-star-outline"></i>
+
+                                    }
+
+                                }
+
                             </div>
                             <div class="pro-dec-review">
                                 <ul>
-                                    <li>32 Reviews </li>
+                                    <li>@Model.Product.ProductReviews.Count() Reviews </li>
                                     <li> Add Your Reviews</li>
                                 </ul>
                             </div>
@@ -93,7 +103,7 @@
                         </div>
                         <div class="pro-dec-categories">
                             <ul>
-                              Category: @Model.Product.Category.Name
+                                Category: @Model.Product.Category.Name
                             </ul>
                         </div>
                         <div class="pro-dec-categories">
@@ -134,7 +144,7 @@
                 <div class="tab-content description-review-bottom">
                     <div id="des-details1" class="tab-pane active">
                         <div class="product-description-wrapper">
-                           @*@Html.Raw(Model.Product.Desc) //After CKEditor active edenden sonra kos*@
+                            @*@Html.Raw(Model.Product.Desc) //After CKEditor active edenden sonra kos*@
                             @Model.Product.Desc
                         </div>
                     </div>
@@ -152,66 +162,79 @@
                     </div>
                     <div id="des-details3" class="tab-pane">
                         <div class="rattings-wrapper">
-                            <div class="sin-rattings">
-                                <div class="star-author-all">
-                                    <div class="ratting-star f-left">
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <span>(5)</span>
+                            @foreach (var review in Model.Product.ProductReviews)
+                            {
+                                <div class="sin-rattings">
+                                    <div class="star-author-all">
+                                        <div class="ratting-star f-left">
+                                            @for (int i = 0; i < review.Rate; i++)
+                                            {
+                                                <i class="ion-star theme-color"></i>
+
+                                            }
+                                            
+                                            <span>(@review.Rate)</span>
+                                        </div>
+                                        <div class="ratting-author f-right">
+                                            <h3>@review.Fullname</h3>
+                                            <span>@review.CreatedAt.AddHours(4).ToString("HH:mm")</span>
+                                            <span>@review.CreatedAt.AddHours(4).ToString("dd MMM yyy")</span>
+                                      </div>
                                     </div>
-                                    <div class="ratting-author f-right">
-                                        <h3>tayeb rayed</h3>
-                                        <span>12:24</span>
-                                        <span>9 March 2018</span>
-                                    </div>
+                                    <p>@review.Message</p>
                                 </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
-                            </div>
-                            <div class="sin-rattings">
-                                <div class="star-author-all">
-                                    <div class="ratting-star f-left">
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <i class="ion-star theme-color"></i>
-                                        <span>(5)</span>
-                                    </div>
-                                    <div class="ratting-author f-right">
-                                        <h3>farhana shuvo</h3>
-                                        <span>12:24</span>
-                                        <span>9 March 2018</span>
-                                    </div>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost rud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nost.</p>
-                            </div>
+
+                            }
                         </div>
                         <div class="ratting-form-wrapper">
                             <h3>Add your Comments :</h3>
                             <div class="ratting-form">
-                                <form action="#">
+                                <form asp-action="review" method="post">
+                                    <input type="hidden" name="productId" value="@Model.Product.Id" />
                                     <div class="star-box">
                                         <h2>Rating:</h2>
-                                        <div class="ratting-star">
-                                            <i class="ion-star theme-color"></i>
-                                            <i class="ion-star theme-color"></i>
-                                            <i class="ion-star theme-color"></i>
-                                            <i class="ion-star theme-color"></i>
-                                            <i class="ion-star"></i>
+                                        <div class="rating">
+                                            <label>
+                                                <input type="radio" name="rate" value="1" />
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="rate" value="2" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="rate" value="3" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="rate" value="4" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="rate" value="5" />
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                                <span class="icon">★</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="rating-form-style mb-20">
-                                                <input placeholder="Name" type="text">
+                                                <input name="Fullname" placeholder="Name" type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="rating-form-style mb-20">
-                                                <input placeholder="Email" type="text">
+                                                <input name="Email" placeholder="Email" type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -238,16 +261,16 @@
             <div class="headphone-slider-active product-slider owl-carousel nav-style">
                 @foreach (var item in Model.RelatedProducts)
                 {
-                        ProductPhoto itemPoster = item.ProductPhotos.OrderBy(x => x.Order).FirstOrDefault();
+                    ProductPhoto itemPoster = item.ProductPhotos.OrderBy(x => x.Order).FirstOrDefault();
                     <div class="devita-product-2">
                         <div class="product-img">
                             <a href="product-details.html">
-                                @if (itemPoster!=null)
+                                @if (itemPoster != null)
                                 {
-                                <img src="~/uploads/products/@itemPoster.Name" alt="">
+                                    <img src="~/uploads/products/@itemPoster.Name" alt="">
 
                                 }
-                                @if (item.DiscountPercent>0)
+                                @if (item.DiscountPercent > 0)
                                 {
                                     <span>-@item.DiscountPercent%</span>
                                 }
@@ -256,13 +279,13 @@
                         <div class="list-col">
                             <div class="gridview">
                                 <div class="product-content text-center">
-                                   @{ 
-                                       string itemPrtags = "";
-                                       foreach (var itemPrTag in item.ProductTags)
-                                       {
-                                           itemPrtags += itemPrTag.Tag.Name + ",";
-                                       }
-                                   }
+                                    @{
+                                        string itemPrtags = "";
+                                        foreach (var itemPrTag in item.ProductTags)
+                                        {
+                                            itemPrtags += itemPrTag.Tag.Name + ",";
+                                        }
+                                    }
                                     <span>
                                         @itemPrtags
                                     </span>
@@ -296,7 +319,7 @@
                         </div>
                     </div>
 
-                                       }
+                }
 
             </div>
         </div>
@@ -304,13 +327,10 @@
     <!-- Compare -->
 
 
-
-
-
-
-
-
-
-   
 </body>
+@section Scripts{
+
+    
+}
+
 

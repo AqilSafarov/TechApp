@@ -57,6 +57,8 @@ namespace TechShop.Models
         [NotMapped]
         public List<int> FileIds { get; set; }
 
+        public List<ProductReview> ProductReviews { get; set; }
+
     }
 
 }

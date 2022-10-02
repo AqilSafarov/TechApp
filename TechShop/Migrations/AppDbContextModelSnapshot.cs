@@ -333,6 +333,44 @@ namespace TechShop.Migrations
                     b.ToTable("ProductPhotos");
                 });
 
+            modelBuilder.Entity("TechShop.Models.ProductReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Fullname")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("ModifideAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rate")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductReviews");
+                });
+
             modelBuilder.Entity("TechShop.Models.ProductTag", b =>
                 {
                     b.Property<int>("Id")
@@ -487,6 +525,17 @@ namespace TechShop.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("TechShop.Models.ProductReview", b =>
+                {
+                    b.HasOne("TechShop.Models.Product", "Product")
+                        .WithMany("ProductReviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("TechShop.Models.ProductTag", b =>
                 {
                     b.HasOne("TechShop.Models.Product", "Product")
@@ -514,6 +563,8 @@ namespace TechShop.Migrations
             modelBuilder.Entity("TechShop.Models.Product", b =>
                 {
                     b.Navigation("ProductPhotos");
+
+                    b.Navigation("ProductReviews");
 
                     b.Navigation("ProductTags");
                 });

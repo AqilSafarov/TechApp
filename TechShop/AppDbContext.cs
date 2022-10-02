@@ -20,6 +20,7 @@ namespace TechShop
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<ProductPhoto> ProductPhotos { get; set; }
-
+        public DbSet<ProductReview> ProductReviews { get; set; }
+        
     }
 }

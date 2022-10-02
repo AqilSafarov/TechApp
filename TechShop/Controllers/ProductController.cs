@@ -25,6 +25,7 @@ namespace TechShop.Controllers
         {
             Product product = await _context.Products.Include(x=>x.ProductPhotos)
                 .Include(x=>x.Category)
+                .Include(x => x.ProductReviews)
                 .Include(x=>x.ProductTags)
                 .ThenInclude(x=>x.Tag).FirstOrDefaultAsync(x => x.Id == id);
 
@@ -41,6 +42,38 @@ namespace TechShop.Controllers
             return View(productDetail);
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Review(ProductReview review)
+        {
+            Product product = await _context.Products.Include(x=>x.ProductReviews).FirstOrDefaultAsync(x => x.Id == review.ProductId);
+            #region ChechkProduct
+            if (product == null)
+            {
+                return NotFound();
+            }
+            #endregion
+
+            ProductReview productReview = new ProductReview
+            {
+                CreatedAt = DateTime.UtcNow,
+                Email = review.Email,
+                Fullname = review.Fullname,
+                Rate = review.Rate,
+                ProductId=review.ProductId,
+                Message = review.Message
+            };
+
+            product.ProductReviews.Add(productReview);
+            product.Rate = product.ProductReviews.Sum(x => x.Rate) / product.ProductReviews.Count();
+
+            await _context.ProductReviews.AddAsync(productReview);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
 
     }
 }
