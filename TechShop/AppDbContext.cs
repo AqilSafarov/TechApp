@@ -21,6 +21,7 @@ namespace TechShop
         public DbSet<ProductTag> ProductTags { get; set; }
         public DbSet<ProductPhoto> ProductPhotos { get; set; }
         public DbSet<ProductReview> ProductReviews { get; set; }
-        
+        public DbSet<Order> Orders { get; set; }
+
     }
 }

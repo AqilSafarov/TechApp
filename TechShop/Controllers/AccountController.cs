@@ -16,11 +16,13 @@ namespace TechShop.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly AppDbContext _context;
 
-        public AccountController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
         public IActionResult Login()
         {
@@ -36,14 +38,14 @@ namespace TechShop.Controllers
                 return View();
             AppUser member = await _userManager.FindByEmailAsync(loginVm.Email);
 
-            if (member==null)
+            if (member == null)
             {
-                ModelState.AddModelError("","Email ve ya sifre sehvdir");
+                ModelState.AddModelError("", "Email ve ya sifre sehvdir");
                 return View();
 
             }
 
-            if (!await _userManager.CheckPasswordAsync(member,loginVm.Password))
+            if (!await _userManager.CheckPasswordAsync(member, loginVm.Password))
             {
                 ModelState.AddModelError("", "Email ve ya sifre sehvdir");
                 return View();
@@ -56,13 +58,13 @@ namespace TechShop.Controllers
                new Claim(ClaimTypes.Email,member.Email),
                new Claim(ClaimTypes.Role,"Member")
 
-            },"Member_Auth");
+            }, "Member_Auth");
             ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            await HttpContext.SignInAsync("Member_Auth",claimsPrincipal);
+            await HttpContext.SignInAsync("Member_Auth", claimsPrincipal);
 
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Register()
         {
@@ -82,7 +84,7 @@ namespace TechShop.Controllers
 
             if (member != null)
             {
-                ModelState.AddModelError("","Bele bir Email adresi artiq mocutdur");
+                ModelState.AddModelError("", "Bele bir Email adresi artiq mocutdur");
                 return View();
             }
             else
@@ -110,15 +112,16 @@ namespace TechShop.Controllers
             {
                 foreach (var item in result.Errors)
                 {
-                    ModelState.AddModelError("",item.Description);
+                    ModelState.AddModelError("", item.Description);
                 }
                 return View();
             }
 
-            await _userManager.AddToRoleAsync(member,"Member");
+            await _userManager.AddToRoleAsync(member, "Member");
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
              {
+               new Claim(ClaimTypes.NameIdentifier,member.Id),
                new Claim(ClaimTypes.Name,member.UserName),
                new Claim(ClaimTypes.Email,member.Email),
                new Claim(ClaimTypes.Role,"Member")
@@ -128,20 +131,72 @@ namespace TechShop.Controllers
 
             await HttpContext.SignInAsync("Member_Auth", claimsPrincipal);
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
 
         }
 
-        [Authorize(Roles= "Member",AuthenticationSchemes = "Member_Auth")]
+        [Authorize(Roles = "Member", AuthenticationSchemes = "Member_Auth")]
         public async Task<IActionResult> Profile()
         {
-            return View();
+            AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            #region CheheckUser
+            if (user == null)
+                return NotFound();
+            #endregion
+            return View(user);
+        }
+
+        [HttpPost]
+
+        [Authorize(Roles = "Member", AuthenticationSchemes = "Member_Auth")]
+        public async Task<IActionResult> Profile(AppUser user)
+        {
+            AppUser existuser = await _userManager.FindByNameAsync(User.Identity.Name);
+            #region CheheckUser
+            if (existuser == null)
+                return NotFound();
+            #endregion
+
+            if (_context.Users.Any(u=>u.Email==user.Email && u.Id!=existuser.Id))
+            {
+                ModelState.AddModelError("Emaail","Emailalready exist");
+                return View();
+            }
+
+            existuser.Email = user.Email;
+            existuser.Fullname = user.Fullname;
+
+            #region CheheckUserChangePass
+            if (!string.IsNullOrWhiteSpace(user.Password) && !string.IsNullOrWhiteSpace(user.CurrentPassword) && !string.IsNullOrWhiteSpace(user.ConfirmPassword))
+            {
+                var resultPass = await _userManager.ChangePasswordAsync(existuser, user.CurrentPassword, user.Password);
+
+                if (!resultPass.Succeeded)
+                {
+                    ModelState.AddModelError("CurrentPassword", "Password yalnisdir");
+                    return View();
+                }
+            }
+
+            #endregion
+
+            await _userManager.UpdateAsync(existuser);
+
+            return RedirectToAction("Index","Home");
         }
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("Member_Auth");
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
+        //public async Task<IActionResult> ShowLoggedUser()
+        //{
+        //    bool isLogged = User.Identity.IsAuthenticated;
+
+        //    AppUser user = isLogged ? await _userManager.FindByNameAsync(User.Identity.Name) : null;
+
+        //    return Ok(new {user.Fullname });
+        //}
     }
 }

@@ -59,6 +59,9 @@ namespace TechShop.Models
 
         public List<ProductReview> ProductReviews { get; set; }
 
+        public List<Order> Orders { get; set; }
+
+
     }
 
 }

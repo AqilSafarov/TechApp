@@ -311,10 +311,16 @@ namespace TechShop.Areas.Manage.Controllers
         public async Task<IActionResult> DeleteReview(int id)
         {
             ProductReview review = await _context.ProductReviews.FirstOrDefaultAsync(x=>x.Id== id);
-            if (review==null)
+            Product product = await _context.Products.Include(x=>x.ProductReviews).FirstOrDefaultAsync(x=>x.Id==review.ProductId);
+
+            product.Rate = (product.ProductReviews.Sum(x=>x.Rate)-review.Rate)/(product.ProductReviews.Count()-1);
+            #region ChechkReview
+            if (review == null)
             {
                 return NotFound();
             }
+            #endregion
+
 
             _context.ProductReviews.Remove(review);
             await _context.SaveChangesAsync();

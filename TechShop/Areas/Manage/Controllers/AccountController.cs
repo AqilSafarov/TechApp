@@ -78,6 +78,7 @@ namespace TechShop.Areas.Manage.Controllers
         }
 
         #region CreateRole
+
         //public async Task Create()
         //{
         //    AppUser user = new AppUser
@@ -86,8 +87,8 @@ namespace TechShop.Areas.Manage.Controllers
         //        Fullname = "Super Admin",
         //    };
 
-        //    await _userManager.CreateAsync(user,"Admin123");
-        //    await _userManager.AddToRoleAsync(user,"Admin");
+        //    await _userManager.CreateAsync(user, "Admin123");
+        //    await _userManager.AddToRoleAsync(user, "Admin");
         //}
         //public async Task CreateRole()
         //{

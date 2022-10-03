@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -91,6 +92,47 @@ namespace TechShop
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                var area = context.Request.RouteValues["Area"];
+                string schem = null;
+
+                if (area==null)
+                {
+                    foreach (var item in context.Request.Cookies)
+                    {
+                        if (item.Key.Contains("Member_Auth"))
+                        {
+                            schem = "Member_Auth";
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in context.Request.Cookies)
+                    {
+                        if (item.Key.Contains("Admin_Auth"))
+                        {
+                            schem = "Admin_Auth";
+                            break;
+                        }
+                    }
+                }
+                if (schem!=null)
+                {
+                    var result=await context.AuthenticateAsync(schem);
+
+                    if (result.Succeeded)
+                    {
+                        context.User = result.Principal;
+                    }
+                   
+                }
+                await next();
+            });
+
 
             app.UseEndpoints(endpoints =>
             {

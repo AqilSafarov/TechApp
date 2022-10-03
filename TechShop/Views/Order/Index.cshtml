@@ -1,0 +1,70 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    double subTotal = 0;
+}
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="width-1">Product Name</th>
+                    <th class="width-2">Price</th>
+                    <th class="width-3">Qty</th>
+                    <th class="width-4">Subtotal</th>
+                    <th class="width-4">Status</th>
+                    <th class="width-4">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        <div class="o-pro-dec">
+                            <p>@item.Product.Name</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="o-pro-dec">
+                            <p>$@item.Product.DiscountPrice</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="o-pro-dec">
+                            <p>@item.Count</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="o-pro-dec">
+                            <p>$@(item.DiscountPrice*item.Count)</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="o-pro-dec">
+                            <p>$@(item.CreatedAt.AddHours(4).ToString("HH:mm dd MMMM yyyy"))</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="o-pro-dec">
+                            <p>@(item.Status==OrderStatus.Pending?"pending":(item.Status==OrderStatus.Accepted?"accepted":"rejected"))</p>
+                        </div>
+                    </td>
+                </tr>
+                    subTotal += (item.DiscountPrice * item.Count);  
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Subtotal </td>
+                    <td colspan="1">$@subTotal</td>
+                </tr>
+               
+            </tfoot>
+        </table>
+    </div>
+</div>       

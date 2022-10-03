@@ -1,4 +1,10 @@
-﻿<!doctype html>
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> usermanager
+
+@{
+    AppUser user = User.Identity.IsAuthenticated ? await usermanager.FindByNameAsync(User.Identity.Name) : null;
+
+ }
+<!doctype html>
 <html class="no-js" lang="zxx">
 
 <!-- Mirrored from d29u17ylf1ylz9.cloudfront.net/devita/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 07 Jul 2018 05:48:05 GMT -->
@@ -82,15 +88,33 @@
                     <div class="col-lg-6 col-md-6 col-12">
                         <div class="header-top-right">
                             <ul>
+                                @if (user != null)
+                                {
+
+                                    <li>
+                                        <a asp-action="profile" asp-controller="Account">@user.Fullname</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="logout" asp-controller="Account">Logout</a>
+                                    </li>
+
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a asp-action="Register" asp-controller="Account">Register</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="Login" asp-controller="Account">Login</a>
+                                    </li>
+                                }
                                 <li>
                                     <a href="my-account.html">My Account</a>
                                 </li>
                                 <li>
                                     <a href="wishlist.html">Wishlist  </a>
                                 </li>
-                                <li>
-                                    <a asp-action="Register" asp-controller="Account">Register or Sign in  </a>
-                                </li>
+
                                 <li>
                                     <a href="checkout.html"> Checkout</a>
                                 </li>

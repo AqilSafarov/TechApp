@@ -252,6 +252,46 @@ namespace TechShop.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("TechShop.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("DiscountPrice")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("ModifideAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("TechShop.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -503,6 +543,23 @@ namespace TechShop.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TechShop.Models.Order", b =>
+                {
+                    b.HasOne("TechShop.Models.AppUser", "AppUser")
+                        .WithMany("Orders")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("TechShop.Models.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("TechShop.Models.Product", b =>
                 {
                     b.HasOne("TechShop.Models.Category", "Category")
@@ -555,6 +612,11 @@ namespace TechShop.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("TechShop.Models.AppUser", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("TechShop.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -562,6 +624,8 @@ namespace TechShop.Migrations
 
             modelBuilder.Entity("TechShop.Models.Product", b =>
                 {
+                    b.Navigation("Orders");
+
                     b.Navigation("ProductPhotos");
 
                     b.Navigation("ProductReviews");

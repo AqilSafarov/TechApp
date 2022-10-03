@@ -87,19 +87,24 @@
                             </ul>
                         </div>
                         <div class="quality-add-to-cart">
-                            <div class="quality">
-                                <label>Qty:</label>
-                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="02">
-                            </div>
-                            <div class="product-action">
-                                <a class="action-cart" title="Add To Cart" href="#"> Add to Cart </a>
-                                <a class="same-action" title="Wishlist" href="#">
-                                    <i class="fa fa-heart-o"></i>
-                                </a>
-                                <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
-                                    <i class="fa fa-sliders fa-rotate-90"></i>
-                                </a>
-                            </div>
+                            <form method="post" asp-action="Create" asp-controller="Order" >
+                                <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+
+                                <div class="quality">
+                                    <label>Qty:</label>
+                                    <input class="cart-plus-minus-box" type="text" name="count" value="1">
+                                </div>
+                                <div class="product-action">
+                                    <button type="submit" class="action-cart" title="Add To Cart"  style="cursor:pointer"> Buy </button>
+                                    <a class="same-action" title="Wishlist" href="#">
+                                        <i class="fa fa-heart-o"></i>
+                                    </a>
+                                    <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
+                                        <i class="fa fa-sliders fa-rotate-90"></i>
+                                    </a>
+                                </div>
+                            </form>
+
                         </div>
                         <div class="pro-dec-categories">
                             <ul>
