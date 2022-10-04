@@ -26,18 +26,18 @@ namespace TechShop.Controllers
         public async Task<IActionResult> Index()
         {
             string userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            //string userId = User.FindFirst("NameIdentifier").Value;
             List<Order> orders = await _context.Orders.Include(x=>x.Product).Where(x => x.AppUserId == userId).OrderByDescending(x => x.CreatedAt).ToListAsync();
 
             return View(orders);
         }
         [HttpPost]
         [Authorize(Roles = "Member", AuthenticationSchemes = "Member_Auth")]
-
         public async Task<IActionResult> Create(Order order)
         {
 
             Product product = await _context.Products.FirstOrDefaultAsync(x=>x.Id==order.ProductId);
-
+                
             if (product == null)
                 return NotFound();
 

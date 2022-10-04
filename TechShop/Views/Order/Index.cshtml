@@ -55,7 +55,11 @@
                         </div>
                     </td>
                 </tr>
-                    subTotal += (item.DiscountPrice * item.Count);  
+                    if (item.Status!=OrderStatus.Rejected)
+                    {
+                        subTotal += (item.DiscountPrice * item.Count);
+
+                    }
                 }
             </tbody>
             <tfoot>

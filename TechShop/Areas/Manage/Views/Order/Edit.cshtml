@@ -1,0 +1,29 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">User: @Model.AppUser.Fullname</h5>
+        <a class="card-title" asp-action="edit" asp-controller="product" asp-route-id="@Model.ProductId">Product: @Model.Product.Name</a>
+        <p class="card-text">Count: @Model.Count</p>
+        <p class="card-text">Price: @Model.Price</p>
+        <p class="card-text"> Discounted Price: @Model.DiscountPrice</p>
+        <p class="card-text"> Total Price: @(Model.DiscountPrice*Model.Count)</p>
+        <p class="card-text"> Date: @(Model.CreatedAt.AddHours(4).ToString("HH:mm dd MMMM yyy"))</p>
+        <a asp-action="index" class="btn btn-primary">Back</a>
+
+        <form asp-action="accept" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button class="btn btn-success" type="submit">Accept</button>
+        </form>
+        <form asp-action="reject" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button class="btn btn-danger" type="submit">Reject</button>
+        </form>
+    </div>
+</div>

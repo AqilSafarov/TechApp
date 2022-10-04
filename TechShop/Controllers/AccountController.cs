@@ -54,6 +54,7 @@ namespace TechShop.Controllers
 
             ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[]
             {
+               new Claim(ClaimTypes.NameIdentifier,member.Id),
                new Claim(ClaimTypes.Name,member.UserName),
                new Claim(ClaimTypes.Email,member.Email),
                new Claim(ClaimTypes.Role,"Member")

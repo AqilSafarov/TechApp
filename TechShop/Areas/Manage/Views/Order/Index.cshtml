@@ -1,0 +1,100 @@
+﻿@model List<Order>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+
+    int maxPageCount = ViewBag.PageCount;
+    int selectedPage = ViewBag.SelectedPage;
+    int counter = (selectedPage - 1) * 2 + 1;
+
+}
+
+<h1>Orders</h1>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-end mb-2">
+        <a asp-action="create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create new
+        </a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">User</th>
+                <th scope="col">Product</th>
+                <th scope="col">Count</th>
+                <th scope="col">Price</th>
+                <th scope="col">Des Price</th>
+                <th scope="col">Total</th>
+                <th scope="col">Date</th>
+                <th scope="col">Satus</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@counter</td>
+                <td>@item.AppUser.Fullname</td>
+                <td>@item.Product.Name</td>
+                <td>@item.Count</td>
+                <td>@item.Price</td>
+                <td>@item.DiscountPrice</td>
+                <td>@(item.DiscountPrice*item.Count)</td>
+                <td>@item.CreatedAt.AddHours(4).ToString("dd.MM.yyyy")</td>
+                <td>@(item.Status==OrderStatus.Pending?"pending":(item.Status==OrderStatus.Accepted?"accepted":"rejected"))</td>
+
+
+
+                <td class="col-md-2">
+
+                    <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">
+                        Edit
+                    </a>
+
+                </td>
+            </tr>
+                counter++;
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+            @if (selectedPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="index" asp-route-page="1" tabindex="-1">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item ">
+                    <a class="page-link" asp-action="index" asp-route-page="@(selectedPage-1)" tabindex="-1">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+            }
+
+            @for (int i = (selectedPage > 1 ? (selectedPage - 1) : 1); i <= (selectedPage < maxPageCount ? selectedPage + 1 : maxPageCount); i++)
+            {
+                <li class="page-item"><a class="page-link" asp-action="index" asp-route-page="@i">@i</a></li>
+            }
+
+
+            @if (selectedPage < maxPageCount)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="index" asp-route-page="@(selectedPage+1)" tabindex="-1">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-action="index" asp-route-page="@maxPageCount" tabindex="-1">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
