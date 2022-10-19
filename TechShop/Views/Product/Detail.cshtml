@@ -1,4 +1,6 @@
 ﻿@model ProductDetailVm
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> usermanager
+
 @{
     ViewData["Title"] = "Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -31,7 +33,7 @@
                         <div id="gallery" class="mt-20 product-dec-slider owl-carousel">
                             @foreach (var photo in Model.Product.ProductPhotos)
                             {
-                                <a data-image="../../uploads/products/@photo.Name" data-zoom-image="../../uploads/products/@photo.Name">
+                                <a  data-image="../../uploads/products/@photo.Name" data-zoom-image="../../uploads/products/@photo.Name">
                                     <img style="max-width:108px;" src="~/uploads/products/@photo.Name" alt="">
                                 </a>
                             }
@@ -47,6 +49,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="product-details-content">
+
                         <h4>@Model.Product.Name</h4>
                         <div class="rating-review">
                             <div class="pro-dec-rating">
@@ -86,16 +89,51 @@
                                 <li><input type="checkbox"> Amazon Basics HD Antenna: <span>25 Mile  $14.99</span></li>
                             </ul>
                         </div>
-                        <div class="quality-add-to-cart">
-                            <form method="post" >
-                                <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                        @{
+                            AppUser user = User.Identity.IsAuthenticated ? await usermanager.FindByNameAsync(User.Identity.Name) : null;
 
+
+                        }
+
+                        @if (user != null)
+
+                        {
+                            <div class="quality-add-to-cart">
+                                <form method="post" asp-action="create" asp-controller="order">
+                                    <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+
+                                    <div class="quality">
+                                        <label>Qty:</label>
+                                        @*<input class="cart-plus-minus-box" type="text" name="qtybutton"  name="count" value="01">*@
+                                    </div>
+
+                                    <div class="product-action">
+                                        <button type="submit" class="action-cart" title="Add To Cart" style="cursor:pointer" name="count" value="1"> Buy </button>
+
+
+                                        <a class="same-action" title="Wishlist" href="#">
+                                            <i class="fa fa-heart-o"></i>
+                                        </a>
+                                        <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
+                                            <i class="fa fa-sliders fa-rotate-90"></i>
+                                        </a>
+                                    </div>
+                                </form>
+
+                            </div>
+
+
+                        }
+                        else
+                        {
+                            <div class="quality-add-to-cart">
+                                <form method="post"></form>
                                 <div class="quality">
                                     <label>Qty:</label>
-                                    <input class="cart-plus-minus-box" type="text" name="count" value="1">
+                                    @*<input class="cart-plus-minus-box" type="text" name="qtybutton"  name="count" value="01">*@
                                 </div>
                                 <div class="product-action">
-                                    <button type="submit" class="action-cart" title="Add To Cart"  style="cursor:pointer"> Buy </button>
+                                    <a class="action-cart" title="Add To Cart" asp-action="AddBasket" asp-controller="product" asp-route-id="@Model.Product.Id"> Buy </a>
                                     <a class="same-action" title="Wishlist" href="#">
                                         <i class="fa fa-heart-o"></i>
                                     </a>
@@ -103,9 +141,10 @@
                                         <i class="fa fa-sliders fa-rotate-90"></i>
                                     </a>
                                 </div>
-                            </form>
+                            </div>
 
-                        </div>
+                        }
+
                         <div class="pro-dec-categories">
                             <ul>
                                 Category: @Model.Product.Category.Name
@@ -177,14 +216,14 @@
                                                 <i class="ion-star theme-color"></i>
 
                                             }
-                                            
+
                                             <span>(@review.Rate)</span>
                                         </div>
                                         <div class="ratting-author f-right">
                                             <h3>@review.Fullname</h3>
                                             <span>@review.CreatedAt.AddHours(4).ToString("HH:mm")</span>
                                             <span>@review.CreatedAt.AddHours(4).ToString("dd MMM yyy")</span>
-                                      </div>
+                                        </div>
                                     </div>
                                     <p>@review.Message</p>
                                 </div>
@@ -269,17 +308,19 @@
                     ProductPhoto itemPoster = item.ProductPhotos.OrderBy(x => x.Order).FirstOrDefault();
                     <div class="devita-product-2">
                         <div class="product-img">
-                            <a href="product-details.html">
+                           
                                 @if (itemPoster != null)
                                 {
+                                <a asp-controller="product" asp-action="detail" asp-route-id="@item.Id">
                                     <img src="~/uploads/products/@itemPoster.Name" alt="">
+
+                                </a>
 
                                 }
                                 @if (item.DiscountPercent > 0)
                                 {
                                     <span>-@item.DiscountPercent%</span>
                                 }
-                            </a>
                         </div>
                         <div class="list-col">
                             <div class="gridview">
@@ -335,7 +376,7 @@
 </body>
 @section Scripts{
 
-    
+
 }
 
 

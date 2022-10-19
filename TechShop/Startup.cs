@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TechShop.Models;
+using TechShop.Services;
 
 namespace TechShop
 {
@@ -37,6 +38,9 @@ namespace TechShop
             }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
             
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
+
+            services.AddTransient<LayoutVmService>();
 
             services.AddAuthentication(options =>
             {
@@ -132,7 +136,6 @@ namespace TechShop
                 }
                 await next();
             });
-
 
 
             app.UseEndpoints(endpoints =>

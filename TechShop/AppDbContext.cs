@@ -22,6 +22,16 @@ namespace TechShop
         public DbSet<ProductPhoto> ProductPhotos { get; set; }
         public DbSet<ProductReview> ProductReviews { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Partner> Partners { get; set; }
+
+        internal object Where()
+        {
+            throw new NotImplementedException();
+        }
+
+        public DbSet<Setting> Settings { get; set; }
+        public DbSet<Subscribe> Subscribes { get; set; }
+        public DbSet<MessageContact> MessageContacts { get; set; }
 
     }
 }

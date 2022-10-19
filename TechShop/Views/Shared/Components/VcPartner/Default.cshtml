@@ -1,0 +1,58 @@
+﻿@model List<Partner>
+@{
+    Layout = null;
+}
+
+
+
+<div class="brand-logo-area">
+    <div class="container">
+        <div class="part" style=" display: block; padding: 60px 0; width: 100%; z-index: 1;">
+
+
+            <div class="courlse owl-theme" style="display: flex !important;">
+
+                @foreach (var item in Model)
+                {
+                    <div class="item" style=" cursor: pointer; text-align: center;  margin-right: 76px !important;">
+                        <img alt="" src="~/uploads/partners/@item.Photo" style="text-align: center; width: auto; display: inline-block;">
+
+                    </div>
+                }
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    (function ($) {
+
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 10,
+        nav: true,
+        prev: false,
+        next: false,
+        dots: false,
+        prevArrow: false,
+        nextArrow: false,
+        owlnav: false,
+
+
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 3
+            },
+            1000: {
+                items: 5
+            }
+        }
+    })
+}) (jQuery);
+</script>

@@ -1,0 +1,64 @@
+﻿@model Slider
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body ">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="@Model.Title"></label>
+                        <input asp-for="@Model.Title" class="form-control" placeholder="Title">
+                        <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="@Model.Text"></label>
+                        <input asp-for="@Model.Text" class="form-control" placeholder="Text">
+                        <span asp-validation-for="@Model.Text" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label asp-for="@Model.Price"></label>
+                        <input asp-for="@Model.Price" class="form-control" placeholder="Price">
+                        <span asp-validation-for="@Model.Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="@Model.RedirectUrl"></label>
+                        <input asp-for="@Model.RedirectUrl" class="form-control" placeholder="RedirectUrl">
+                        <span asp-validation-for="@Model.RedirectUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group row">
+                        <div id="img-update" style="position:absolute; left:493px; ">
+                            <img src="/uploads/sliders/@Model.Photo" alt="" style="width:15%; height:43%; border-radius:50px; ">
+                            <i class="fas fa-times removePhoto" style="cursor:pointer"></i>
+
+                        </div>
+                        <label class="col-form-label col-md-2" asp-for="ImageFile">Img</label>
+                        <div class="col-md-10">
+                            <input asp-for="ImageFile" class="input w-full border mt-2">
+
+                        </div>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(document).on("click", ".removePhoto", function () {
+                $(this).parent().empty()
+            })
+        })
+    </script>
+}

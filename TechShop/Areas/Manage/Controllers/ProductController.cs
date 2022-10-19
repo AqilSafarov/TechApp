@@ -26,7 +26,7 @@ namespace TechShop.Areas.Manage.Controllers
         {
 
             double totalCount = await _context.Categories.CountAsync();
-            int pageCount = (int)Math.Ceiling(totalCount / 2);
+            int pageCount = (int)Math.Ceiling(totalCount / 6);
 
             if (page < 1) page = 1;
             else if (page > pageCount) page = pageCount;
@@ -35,7 +35,7 @@ namespace TechShop.Areas.Manage.Controllers
             ViewBag.SelectedPage = page;
             ProductVm productVm = new ProductVm
             {
-                Products = await _context.Products.Include(x=>x.Category).ToListAsync()
+                Products = await _context.Products.Include(x=>x.Category).Skip((page - 1) * 6).Take(6).ToListAsync()
         };
             return View(productVm);
         }
@@ -103,6 +103,7 @@ namespace TechShop.Areas.Manage.Controllers
             {
 
                 #region ChechkFileRange
+
                 if (file.Length > 2 * (1024 * 1024))
                 {
                     ModelState.AddModelError("File", "2 mq artiq ola bilmez");

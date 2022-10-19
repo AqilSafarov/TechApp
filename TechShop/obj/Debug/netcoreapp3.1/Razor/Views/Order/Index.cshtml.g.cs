@@ -33,8 +33,15 @@ using TechShop.Helpers;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 4 "C:\Users\User\OneDrive\Masaüstü\TechShop\TechShop\Views\_ViewImports.cshtml"
+using TechShop.ViewComponents;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"001e5dc9177d18d1efe6236822e1751566b39dd4", @"/Views/Order/Index.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"778239ec7fc63eb6d0bd7480cb11642cb9ea0be8", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"f084c62583511325912a0f01498db746d15f1fa0", @"/Views/_ViewImports.cshtml")]
     public class Views_Order_Index : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<List<Order>>
     {
         #pragma warning disable 1998

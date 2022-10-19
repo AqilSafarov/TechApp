@@ -1,8 +1,271 @@
-﻿
+﻿@model ProductVm
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int pageCount = ViewBag.PageCount;
+    int selectedPg = ViewBag.SelectedPage;
+    int? categoryId = ViewBag.CategoryId;
 }
 
-<h1>Index</h1>
+<div class="breadcrumb-area gray-bg-7">
+    <div class="container">
+        <div class="breadcrumb-content">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Laptop &amp; Computer </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="shop-page-area pt-30 pb-65">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="shop-sidebar-wrapper gray-bg-7">
+                    <div class="shop-widget">
+                        <h4 class="shop-sidebar-title">Shop By Categories</h4>
+                        <div class="shop-catigory">
+                            <ul id="faq">
+                                <li>
+                                    <a data-toggle="collapse" data-parent="#faq" href="#shop-catigory-1">Laptop &amp; Computer <i class="ion-ios-arrow-down"></i></a>
+                                    <ul id="shop-catigory-1" class="panel-collapse collapse show">
+                                        @foreach (var item in Model.Categories)
+                                        {
+                                            <li><a asp-action="index" asp-controller="product" asp-route-categoryId="@item.Id">@item.Name</a></li>
 
+                                        }
+                                       
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="shop-widget mt-40 shop-sidebar-border pt-35">
+                        <h4 class="shop-sidebar-title">Popular Tags</h4>
+                        <div class="shop-tags mt-25">
+                            <ul>
+                                @foreach (var item in Model.Tags)
+                                {
+                                    <li><a href="#">@item.Name</a></li>
+
+                                }
+                              
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="banner-area pb-30 mrg-top-md mrg-top-sm">
+                    <a href="#"><img alt="" src="assets/img/banner/banner-49.jpg"></a>
+                </div>
+
+                @*<div class="shop-topbar-wrapper">
+                    <div class="shop-topbar-left">
+                        <div class="grid-list-options nav view-mode">
+                            <a class="active" href="#product-grid" data-view="product-grid" data-toggle="tab"><i class="fa fa-th"></i></a>
+                            <a href="#product-list" data-view="product-list" data-toggle="tab"><i class="fa fa-list-ul"></i></a>
+                        </div>
+                        <p>Showing 1 - 20 of 30 results  </p>
+                    </div>
+                    <div class="product-sorting-wrapper">
+                        <div class="product-shorting shorting-style">
+                            <label>View:</label>
+                            <select>
+                                <option value=""> 20</option>
+                                <option value=""> 23</option>
+                                <option value=""> 30</option>
+                            </select>
+                        </div>
+                        <div class="product-show shorting-style">
+                            <label>Sort by:</label>
+                            <select>
+                                <option value="">Default</option>
+                                <option value=""> Name</option>
+                                <option value=""> price</option>
+                            </select>
+                        </div>
+                    </div>*
+                </div>*@
+                <div class="tab-content jump">
+                    <div class="tab-pane active pb-20" id="product-grid">
+                        <div class="row">
+                            @foreach (var item in Model.Products)
+                            {
+                                <div class="col-xl-3 col-lg-4 col-md-4 mb-30">
+                                    <div class="devita-product-2 mrg-inherit">
+                                        <div class="product-img">
+                                            <div class="product-img-slider">
+                                                @foreach (var picture in item.ProductPhotos)
+                                                {
+                                                    <a asp-controller="product" asp-action="detail" asp-route-id="@item.Id"><img src="~/uploads/products/@picture.Name" alt=""></a>
+
+                                                }
+                                            </div>
+                                            @if (item.DiscountPercent > 0)
+                                            {
+                                                <span>-@item.DiscountPercent %</span>
+
+                                            }
+                                            else
+                                            {
+                                                <span style="display:none!important;">
+
+
+                                                </span>
+
+                                            }
+                                        </div>
+                                        <div class="list-col">
+                                            <div class="gridview">
+                                                <div class="product-content text-center">
+                                                    <span>Desktop, Accessories</span>
+                                                    <h4><a href="product-details.html">@item.Name</a></h4>
+                                                    <div class="product-price-wrapper">
+                                                        <span>$@item.Price</span>
+                                                    </div>
+                                                </div>
+                                                <div class="product-action-wrapper-2 text-center">
+                                                    <div class="product-rating">
+
+                                                        @for (int i = 1; i <= 5; i++)
+                                                        {
+                                                            if (i <= item.Rate)
+                                                            {
+                                                                <i class="ion-android-star-outline theme-star"></i>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <i class="ion-android-star-outline"></i>
+
+                                                            }
+
+                                                        }
+                                                    </div>
+                                                    <p>@(item.InfoText!=null && item.InfoText.Length>30?item.InfoText.Substring(0,30): item.InfoText)</p>
+
+                                                    <div class="product-action">
+                                                        <a class="same-action" title="Wishlist" href="#">
+                                                            <i class="fa fa-heart-o"></i>
+                                                        </a>
+                                                        <a class="action-cart" title="Add To Cart" asp-action="AddBasket" asp-controller="product" asp-route-id="@item.Id">
+                                                            Add to Cart
+                                                        </a>
+                                                        <a class="same-action compare-mrg" data-target="#exampleCompare" data-toggle="modal" title="Compare" href="#">
+                                                            <i class="fa fa-sliders fa-rotate-90"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="product-list">
+                        <div class="row">
+                            @foreach (var item in Model.Products)
+
+                            {
+                                <div class="col-lg-12">
+                                    <div class="product-list-wrapper shop-border mb-40 pb-40">
+                                        <div class="product-img">
+                                            <div class="product-img-slider slick-initialized slick-slider">
+                                                <span class="cr-navigation cr-navigation-prev slick-arrow" style="display: block;"><i class="fa fa-angle-left"></i></span>
+                                                <div class="slick-list draggable">
+                                                    <div class="slick-track" style="opacity: 1; width: 1680px; transform: translate3d(-240px, 0px, 0px);">
+                                                        @foreach (var picture in item.ProductPhotos)
+                                                        {
+                                                            <a asp-controller="product" asp-action="detail" asp-route-id="@item.Id" class="slick-slide slick-cloned" data-slick-index="-1" aria-hidden="true" tabindex="-1" style="width: 240px;">
+                                                                <img src="~/uploads/products/@picture.Name" alt="">
+                                                            </a>
+
+                                                        }
+
+                                                    </div>
+                                                </div>
+
+
+                                                <span class="cr-navigation cr-navigation-next slick-arrow" style="display: block;"><i class="fa fa-angle-right"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="product-list-content">
+                                            <span>Watch, Accessories</span>
+                                            <h4><a href="#">@item.Name</a></h4>
+                                            <div class="product-rating">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= item.Rate)
+                                                    {
+                                                        <i class="ion-android-star-outline theme-star"></i>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="ion-android-star-outline"></i>
+
+                                                    }
+
+                                                }
+                                            </div>
+                                            <div class="product-price-wrapper">
+                                                <span>$@item.DiscountPrice</span>
+                                                <span class="product-price-old">$@item.Price </span>
+                                            </div>
+                                            <p>Mirum est notare quam littera gothica quam putamus parum claram, anteposuerit litterarum formas humanitatis per seacula.</p>
+                                            <div class="product-action">
+                                                <a class="action-cart" asp-action="AddBasket" asp-controller="product" asp-route-id="@item.Id" title="Add To Cart"> Add to Cart </a>
+                                                <a class="same-action" href="#" title="Wishlist">
+                                                    <i class="fa fa-heart-o"></i>
+                                                </a>
+                                                <a class="same-action compare-mrg" href="#" title="Compare" data-toggle="modal" data-target="#exampleCompare">
+                                                    <i class="fa fa-sliders fa-rotate-90"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+                    </div>
+                    <div class="pagination-total-pages">
+                        <div class="pagination-style">
+                            <ul>
+                                @if (selectedPg > 1)
+                                {
+                                    <li><a class="prev-next prev" asp-action="index" asp-controller="product" asp-route-page="1" asp-route-categoryId="@categoryId"><i class="ion-ios-arrow-left"></i> Prev</a></li>
+
+                                }
+                                @for (int i = (selectedPg - 2 < 1 ? 1 : selectedPg - 2); i <= (selectedPg + 2 > pageCount ? pageCount : selectedPg + 2); i++)
+                                {
+                                    <li><a class="@(i==selectedPg?"active":"")" asp-action="index" asp-controller="product" asp-route-page="@i" asp-route-categoryId="@categoryId">@i</a></li>
+
+                                }
+                                @if (selectedPg < pageCount)
+                                {
+                                    <li><a class="prev-next next" asp-action="index" asp-controller="product" asp-route-page="@pageCount" asp-route-categoryId="@categoryId">Next<i class="ion-ios-arrow-right"></i> </a></li>
+
+                                }
+
+                            </ul>
+                        </div>
+                        <div class="total-pages">
+                            <p>Showing 1 - 20 of 30 results  </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

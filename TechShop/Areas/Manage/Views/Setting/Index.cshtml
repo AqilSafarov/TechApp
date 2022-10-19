@@ -1,0 +1,106 @@
+﻿@model List<Setting>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
+
+}
+
+<h1>Index</h1>
+
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-end mb-2">
+        <a asp-action="create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create new
+        </a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">LogoNav</th>
+                <th scope="col">About</th>
+                <th scope="col">PhoneNumNav</th>
+                <th scope="col">Address</th>
+                <th scope="col">EmailNav</th>
+                <th scope="col">ContactNumPhone</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td><img width="28" height="28" src="~/uploads/settings/@item.LogoNav" class="rounded-circle m-r-5" alt=""> </td>
+
+                <td>@(item.About!=null && item.About.Length>30?item.About.Substring(0,30): item.About)</td>
+                <td>@item.PhoneNumNav</td>
+                <td>@item.Address</td>
+                <td>@item.EmailNav</td>
+                <td>@item.ContactNumPhone</td>
+                <td>@item.CreatedAt.AddHours(4).ToString("dd.MM.yyyy")</td>
+
+
+
+
+
+                <td class="col-md-2">
+
+                    <a asp-action="detail" asp-route-id="@item.Id" class="btn btn-info">
+                        <i class="far fa-eye"></i>
+                    </a>
+                    <a asp-action="edit" asp-route-id="@item.Id" class="btn btn-warning">
+                        <i class="far fa-edit"></i>
+                    </a>
+                    <a asp-action="delete" asp-route-id="@item.Id" class="btn btn-danger delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+
+</div>
+
+@section Scripts{
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(document).on("click", ".delete", function (e) {
+                e.preventDefault();
+                url = $(this).attr("href");
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this imaginary file!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            fetch(url).then(function (response) {
+                                if (response.status == 200) {
+                                    swal("Poof! Your data  deleted!", {
+                                        icon: "success",
+                                    });
+                                    location.reload();
+                                }
+                                else {
+                                    swal("An error occurred")
+                                }
+
+                            })
+
+                        } else {
+                            swal("Your imaginary file is safe!");
+                        }
+                    });
+            })
+        })
+
+    </script>
+}

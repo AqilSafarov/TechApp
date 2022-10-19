@@ -22,16 +22,24 @@ namespace TechShop.Areas.Manage.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             double totalCount = await _context.Categories.CountAsync();
-            int pageCount = (int)Math.Ceiling(totalCount / 2);
+            int pageCount = (int)Math.Ceiling(totalCount / 6);
 
-            if (page < 1) page = 1;
-            else if (page > pageCount) page = pageCount;
+            if (page<1)
+            {
+                page = 1;
+            }
+            else if(page> pageCount)
+            {
+                page = pageCount;
+            }
 
             ViewBag.PageCount = pageCount;
             ViewBag.SelectedPage = page;
+
+
             CategoryVm category = new CategoryVm
             {
-                Categories = await _context.Categories.Where(x=>!x.IsDeleted).ToListAsync()
+                Categories = await _context.Categories.Skip((page-1)*6).Take(6).Where(x=>!x.IsDeleted).ToListAsync()
             };
             return View(category);
         }

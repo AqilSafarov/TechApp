@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\uploads\settings\" />
+    <Folder Include="wwwroot\uploads\partners\" />
+    <Folder Include="wwwroot\uploads\sliders\" />
     <Folder Include="wwwroot\uploads\products\" />
   </ItemGroup>
 

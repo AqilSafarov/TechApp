@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TechShop.Models;
+using TechShop.View_Models;
 
 namespace TechShop.Controllers
 {
@@ -36,10 +39,55 @@ namespace TechShop.Controllers
         public async Task<IActionResult> Create(Order order)
         {
 
-            Product product = await _context.Products.FirstOrDefaultAsync(x=>x.Id==order.ProductId);
-                
+            Product product = _context.Products.FirstOrDefault(x => x.Id == order.ProductId);
             if (product == null)
+            {
                 return NotFound();
+            }
+            //AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            List<BasketCardItemModel> basketItem = new List<BasketCardItemModel>();
+
+            if (Request.Cookies["basket"] == null)
+            {
+                //basketCardVm.TotalPrice = book.Price;
+                BasketCardItemModel basketCardItemModel = new BasketCardItemModel
+                {
+                    Id = order.ProductId,
+                    Count = 1
+                };
+                basketItem.Add(basketCardItemModel);
+            }
+            else
+            {
+                basketItem = JsonConvert.DeserializeObject<List<BasketCardItemModel>>(Request.Cookies["basket"]);
+
+                //basketCardVm.TotalPrice += book.Price;
+
+                if (basketItem.Any(b => b.Id == order.ProductId))
+                {
+                    BasketCardItemModel basketBasketItem = basketItem.FirstOrDefault(x => x.Id == order.ProductId);
+                    basketBasketItem.Count += 1;
+                }
+                else
+                {
+                    BasketCardItemModel basketCardItemModel = new BasketCardItemModel
+                    {
+                        Id = order.ProductId,
+
+                        Count = 1
+                    };
+                    basketItem.Add(basketCardItemModel);
+                }
+            }
+
+
+            Response.Cookies.Append("basket", JsonConvert.SerializeObject(basketItem), new CookieOptions { MaxAge = TimeSpan.FromDays(1) });
+
+            //Product product = await _context.Products.FirstOrDefaultAsync(x=>x.Id==order.ProductId);
+                
+            //if (product == null)
+            //    return NotFound();
 
             AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
 

@@ -9,6 +9,7 @@ namespace TechShop.View_Models
     public class ProductDetailVm
     {
         public Product Product { get; set; }
+        public List<Product> Products { get; set; }
         public List<Product> RelatedProducts { get; set; }
     }
 }

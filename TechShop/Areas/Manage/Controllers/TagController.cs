@@ -20,18 +20,24 @@ namespace TechShop.Areas.Manage.Controllers
         }
         public async Task<IActionResult> Index(int page=1)
         {
-            double totalCount = await _context.Categories.CountAsync();
-            int pageCount = (int)Math.Ceiling(totalCount / 2);
+            double totalCount = await _context.Tags.CountAsync(); //Titalim 8 eded tagim var 
+            int pageCount = (int)Math.Ceiling(totalCount / 6); //8 i bol 6 =1,3
 
-            if (page < 1) page = 1;
-            else if (page > pageCount) page = pageCount;
 
+            if (page < 1)
+            {
+                page = 1;
+            }
+            else if (page > pageCount)
+            {
+                page = pageCount;
+            }
             ViewBag.PageCount = pageCount;
             ViewBag.SelectedPage = page;
 
             TagVm tag = new TagVm
             {
-                Tags = await _context.Tags.ToListAsync()
+                Tags = await _context.Tags.Skip((page - 1) * 6).Take(6).ToListAsync()
             };
 
             return View(tag);

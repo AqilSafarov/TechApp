@@ -1,0 +1,323 @@
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> usermanager
+@inject TechShop.Services.LayoutVmService services
+@model VmNavSetCat
+
+@{
+    AppUser user = User.Identity.IsAuthenticated ? await usermanager.FindByNameAsync(User.Identity.Name) : null;
+    var basket = services.GetBasket();
+}
+@{
+Layout = null;
+}
+
+
+
+
+<!--Notification Section-->
+<div class="notification-section notification-img-1 notification-padding-1">
+    <div class="container">
+        <div class="notification-wrapper">
+            <div class="notification-content ml-285">
+                <p>Get free shipping and a worry - Free 30 day money back guarantee when you !  <a href="#">Shop Online</a> </p>
+            </div>
+            <div class="notification-close notification-icon">
+                <button><i class="ion-close"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- header start -->
+<header class="header-area theme-bg">
+    <div class="header-top pt-10 pb-13 border-bottom-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="header-top-left">
+                        <div class="language-currency">
+                            <span>Language:</span>
+                            <div class="lang-curr-dropdown">
+                                <ul>
+                                    <li>
+                                        <a class="language-click" href="#">English <i class="ion-chevron-down"></i></a>
+                                        <ul class="language-dropdown">
+                                            <li><a href="#">English </a></li>
+                                            <li><a href="#">Bangla </a></li>
+                                            <li><a href="#">Hindi </a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="language-currency lang-curr-mrg">
+                            <span>Currency: </span>
+                            <div class="lang-curr-dropdown">
+                                <ul>
+                                    <li>
+                                        <a class="language-click" href="#">USD <i class="ion-chevron-down"></i></a>
+                                        <ul class="language-dropdown">
+                                            <li><a href="#">USD </a></li>
+                                            <li><a href="#">US </a></li>
+                                            <li><a href="#">EURO </a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="header-top-right">
+                        <ul>
+                            @if (user != null)
+                            {
+
+                                <li>
+                                    <a asp-action="profile" asp-controller="Account">@user.Fullname</a>
+                                </li>
+                                <li>
+                                    <a asp-action="index" asp-controller="Order">Orders</a>
+                                </li>
+                                <li>
+                                    <a asp-action="profile" asp-controller="Account">My Account</a>
+                                </li>
+                                <li>
+                                    <a asp-action="logout" asp-controller="Account">Logout</a>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li>
+                                    <a asp-action="Register" asp-controller="Account">Register</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Login" asp-controller="Account">Login</a>
+                                </li>
+                                <li>
+                                    <a asp-action="Register" asp-controller="account">Orders</a>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-middle ptb-40 border-bottom-1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-12">
+                    <div class="logo logo-mrg">
+                        <a href="index.html">
+                            <img src="~/uploads/settings/@Model.Setting.LogoNav" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-12 col-12">
+                    <div class="header-contact-search-wrapper f-right">
+                        <div class="header-contact middle-same">
+                            <div class="header-contact-icon">
+                                <i class="pe-7s-headphones"></i>
+                            </div>
+                            <div class="header-contact-content">
+                                <p>Call us <br>Free Support:@Model.Setting.PhoneNumNav</p>
+                            </div>
+                        </div>
+                        <div class="header-search middle-same">
+                            <form class="header-search-form" method="get" asp-controller="product" asp-action="index">
+                                <input type="text" name="searchData" placeholder="Search entire store here ...">
+                                <button type="submit">
+                                    <i class="ion-ios-search-strong"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="header-cart middle-same">
+                            <button class="icon-cart">
+                                <i class="pe-7s-shopbag cart-bag"></i>
+                                <span class="count-amount">$@basket.TotalPrice</span>
+                                <i class="ion-chevron-down cart-down"></i>
+                                <span class="count-style">@basket.BasketBookItems.Count()</span>
+                            </button>
+                            <div class="shopping-cart-content">
+                                <ul>
+                                    @foreach (var item in basket.BasketBookItems)
+                                    {
+                                        <li class="single-shopping-cart" style="flex-wrap:unset !important">
+                                            <div class="shopping-cart-img">
+                                                <a href="#"><img alt="" src="/uploads/products/@item.Poster" style="width:108px; padding:0,10px"></a>
+                                            </div>
+                                            <div class="shopping-cart-title">
+                                                <h4><a href="#">@item.Name </a></h4>
+                                                <h6>Count: @item.Count</h6>
+                                                <span>$@item.Price</span>
+                                            </div>
+                                            <div class="shopping-cart-delete">
+                                                <a asp-action="deletebasket" asp-controller="product" asp-route-id="@item.Id"><i class="ion-android-close"></i></a>
+                                            </div>
+                                        </li>
+
+                                    }
+                                </ul>
+                                <div class="shopping-cart-total">
+                                    <h4>Total : <span class="shop-total">$@basket.TotalPrice</span></h4>
+                                </div>
+                                @if (user != null)
+                                {
+                                    <div class="shopping-cart-btn">
+                                        <a class="btn-style btn-hover" href="cart-page.html">view cart</a>
+                                        <a class="btn-style btn-hover" asp-action="index" asp-controller="Order">checkout</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="shopping-cart-btn">
+                                        <a class="btn-style btn-hover" asp-action="Register" asp-controller="Account">checkout</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="logo mobile-logo">
+                        <a href="index.html">
+                            <img alt="" src="~/assets/img/logo/logo.png">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="mobile-menu-area">
+                        <div class="mobile-menu">
+                            <nav id="mobile-menu-active">
+                                <ul class="menu-overflow">
+                                    <li>
+                                        <a asp-controller="Home" asp-action="Index">HOME</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">pages</a>
+                                        <ul>
+                                            <li><a href="about-us.html">about us</a></li>
+                                            <li><a href="shop.html">shop Grid</a></li>
+                                            <li><a href="shop-list.html">shop list</a></li>
+                                            <li><a href="product-details.html">product details</a></li>
+                                            <li><a href="cart-page.html">cart page</a></li>
+                                            <li><a href="checkout.html">checkout</a></li>
+                                            <li><a href="wishlist.html">wishlist</a></li>
+                                            <li><a href="my-account.html">my account</a></li>
+                                            <li><a href="login-register.html">login / register</a></li>
+                                            <li><a href="contact.html">contact</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="shop.html"> Laptops & computer </a>
+                                        <ul>
+                                            <li>
+                                                <a href="#">Categories 01</a>
+                                                <ul>
+                                                    @foreach (var item in services.GetCategories())
+                                                    {
+                                                        <li><a asp-action="index" asp-controller="product" asp-route-categoryId="@item.Id">@item.Name</a></li>
+                                                    }
+
+
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#">Categories 02</a>
+                                                <ul>
+                                                    <li><a href="shop.html">UltraSharp</a></li>
+                                                    <li><a href="shop.html">LED Monitor</a></li>
+                                                    <li><a href="shop.html">Others Monitor</a></li>
+                                                    <li><a href="shop.html">Alienware</a></li>
+                                                    <li><a href="shop.html">Acer Predator</a></li>
+                                                    <li><a href="shop.html">MSI Vortex G65</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#">Categories 03</a>
+                                                <ul>
+                                                    <li><a href="shop.html">All-in-One PC</a></li>
+                                                    <li><a href="shop.html">Mouse</a></li>
+                                                    <li><a href="shop.html">Keyboard</a></li>
+                                                    <li><a href="shop.html">Trackpad</a></li>
+                                                    <li><a href="shop.html">Peripherals</a></li>
+                                                    <li><a href="shop.html">Keyboard Covers</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#">Categories 04</a>
+                                                <ul>
+                                                    <li><a href="shop.html">UltraSharp</a></li>
+                                                    <li><a href="shop.html">LED Monitor</a></li>
+                                                    <li><a href="shop.html">Others Monitor</a></li>
+                                                    <li><a href="shop.html">Alienware</a></li>
+                                                    <li><a href="shop.html">Acer Predator</a></li>
+                                                    <li><a href="shop.html">MSI Vortex G65</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="#">Categories 05</a>
+                                                <ul>
+                                                    <li><a href="shop.html">All-in-One PC</a></li>
+                                                    <li><a href="shop.html">Mouse</a></li>
+                                                    <li><a href="shop.html">Keyboard</a></li>
+                                                    <li><a href="shop.html">Trackpad</a></li>
+                                                    <li><a href="shop.html">Peripherals</a></li>
+                                                    <li><a href="shop.html">Keyboard Covers</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">BLOG</a>
+                                        <ul>
+                                            <li><a href="blog.html">blog page</a></li>
+                                            <li><a href="blog-leftsidebar.html">blog sidebar</a></li>
+                                            <li><a href="blog-details.html">blog details</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a asp-controller="Contact" asp-action="Index"> Contact us </a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-menu main-none">
+                <nav>
+                    <ul>
+                        <li>
+                            <a asp-action="Index" asp-controller="Home">Home </a>
+                        </li>
+
+                        <li>
+                            <a asp-action="Index" asp-controller="Product">Laptops & computer <i class="ion-chevron-down"></i> </a>
+                            <ul class="submenu">
+                                @foreach (var item in services.GetCategories())
+                                {
+                                    <li><a asp-action="index" asp-controller="product" asp-route-categoryId="@item.Id">@item.Name</a></li>
+                                }
+                            </ul>
+                        </li>
+
+                        @{
+                            var id = services.GetCategory();
+
+                        }
+                        <li><a asp-action="index" asp-controller="product" asp-route-categoryId="@id.CategoryPhone.Id">@Model.CategoryPhone.Name </a></li>
+                        <li><a asp-action="index" asp-controller="product" asp-route-categoryId="@id.CategoryWatch.Id">@Model.CategoryWatch.Name</a></li>
+                        <li><a asp-controller="Contact" asp-action="">contacts  </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

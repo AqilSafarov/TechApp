@@ -33,7 +33,7 @@ namespace TechShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(MemberLoginVm loginVm)
         {
-
+           
             if (!ModelState.IsValid)
                 return View();
             AppUser member = await _userManager.FindByEmailAsync(loginVm.Email);
@@ -64,7 +64,10 @@ namespace TechShop.Controllers
 
             await HttpContext.SignInAsync("Member_Auth", claimsPrincipal);
 
-
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Register()
@@ -77,7 +80,7 @@ namespace TechShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(MemberRegisterVm registerVm)
         {
-
+            
             if (!ModelState.IsValid)
                 return View();
 
@@ -131,6 +134,11 @@ namespace TechShop.Controllers
             ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync("Member_Auth", claimsPrincipal);
+
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
 
             return RedirectToAction("Index", "Home");
 
@@ -188,6 +196,10 @@ namespace TechShop.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync("Member_Auth");
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
 
             return RedirectToAction("Index", "Home");
         }
